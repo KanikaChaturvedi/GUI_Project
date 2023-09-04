@@ -59,7 +59,7 @@ def upload_changes():
     
     if selected_directory:
         # Use 'docker cp' to copy files from the selected local directory to the container directory
-        subprocess.run(["docker", "cp", f"{selected_directory}/app", f"{container_id}:/"])
+        subprocess.run(["docker", "cp", f"{selected_directory}/{selected_file}", f"{container_id}:/app"])
 
 def compile_selected_file():
     selected_file = file_listbox.get(file_listbox.curselection())
