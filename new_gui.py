@@ -69,15 +69,34 @@ def compile_selected_file():
         # container.exec_run(compile_command)
         # subprocess.Popen(["make", {selected_file}])
         # subprocess.run(["docker", "exec", container_id_entry.get(), "cd", selected_file, "&&", "make"])
-        subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && make"])
+        result_compile= subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && make"], 
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True)
 
         # run_command= f"{selected_file}/myapp.exec"
         # print(run_command)
         # container.exec_run(run_command)
 
-        result_label.config(text=f"Compiled {selected_file} in {container_id}")
+        # result_label.config(text=f"Compiled {selected_file} in {container_id}")
+        output = result_compile.stdout
+        error = result_compile.stderr
+        
+        # Display the compilation result in the Text widget
+        output_text.config(state=tk.NORMAL)  # Allow editing
+        output_text.delete("1.0", tk.END)  # Clear existing content
+        output_text.insert("1.0", f"Compiled {selected_file} in {container_id}\n")
+        output_text.insert(tk.END, "Compilation Output:\n")
+        output_text.insert(tk.END, output)
+        output_text.insert(tk.END, "Compilation Error (if any):\n")
+        output_text.insert(tk.END, error)
+        output_text.config(state=tk.DISABLED)  # Disable editing
     except docker.errors.NotFound:
         result_label.config(text="Container not found")
+
+
+# e7f13d9814fb0379d9b4b0b543d413195bc9627b0a98d79765dde59ac1c4acbe
+
 
 
 def run_selected_file():
@@ -86,8 +105,25 @@ def run_selected_file():
     try:
         client = docker.from_env()
         container = client.containers.get(container_id)
-        subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && ./myapp.exec"])
-        result_label.config(text=f"Compiled {selected_file} in {container_id}")
+        result_run= subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && ./myapp.exec"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True)
+        
+
+        # result_label.config(text=f"Compiled {selected_file} in {container_id}")
+        output = result_run.stdout
+        error = result_run.stderr
+        
+        # Display the compilation result in the Text widget
+        output_text.config(state=tk.NORMAL)  # Allow editing
+        output_text.delete("1.0", tk.END)  # Clear existing content
+        output_text.insert("1.0", f"Executed {selected_file} in {container_id}\n")
+        output_text.insert(tk.END, "Executed Output:\n")
+        output_text.insert(tk.END, output)
+        output_text.insert(tk.END, "Execution Error (if any):\n")
+        output_text.insert(tk.END, error)
+        output_text.config(state=tk.DISABLED)  # Disable editing
     except docker.errors.NotFound:
         result_label.config(text="Container not found")
 
@@ -123,6 +159,9 @@ run_button.pack()
 
 upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
 upload_changes_button.pack()
+
+output_text = tk.Text(root, height=50, width=100, wrap=tk.WORD)
+output_text.pack()
 
 result_label = Label(root, text="")
 result_label.pack()
