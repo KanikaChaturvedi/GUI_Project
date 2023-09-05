@@ -86,9 +86,9 @@ def compile_selected_file():
         output_text.config(state=tk.NORMAL)  # Allow editing
         output_text.delete("1.0", tk.END)  # Clear existing content
         output_text.insert("1.0", f"Compiled {selected_file} in {container_id}\n")
-        output_text.insert(tk.END, "Compilation Output:\n")
+        output_text.insert(tk.END, "Compilation Output:\n\n")
         output_text.insert(tk.END, output)
-        output_text.insert(tk.END, "Compilation Error (if any):\n")
+        output_text.insert(tk.END, "\n\n\nCompilation Error (if any):\n\n")
         output_text.insert(tk.END, error)
         output_text.config(state=tk.DISABLED)  # Disable editing
     except docker.errors.NotFound:
@@ -119,9 +119,9 @@ def run_selected_file():
         output_text.config(state=tk.NORMAL)  # Allow editing
         output_text.delete("1.0", tk.END)  # Clear existing content
         output_text.insert("1.0", f"Executed {selected_file} in {container_id}\n")
-        output_text.insert(tk.END, "Executed Output:\n")
+        output_text.insert(tk.END, "Executed Output:\n\n")
         output_text.insert(tk.END, output)
-        output_text.insert(tk.END, "Execution Error (if any):\n")
+        output_text.insert(tk.END, "\n\n\nExecution Error (if any):\n\n")
         output_text.insert(tk.END, error)
         output_text.config(state=tk.DISABLED)  # Disable editing
     except docker.errors.NotFound:
