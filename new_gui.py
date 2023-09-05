@@ -62,8 +62,31 @@ def compile_selected_file():
     try:
         client = docker.from_env()
         container = client.containers.get(container_id)
-        compile_command = f"gcc -o compiled_program {selected_file}"
-        container.exec_run(compile_command)
+        # compile_command = f"gcc -o compiled_program {selected_file}"
+
+        # compile_command= f"{selected_file}/make"
+        # print(compile_command)
+        # container.exec_run(compile_command)
+        # subprocess.Popen(["make", {selected_file}])
+        # subprocess.run(["docker", "exec", container_id_entry.get(), "cd", selected_file, "&&", "make"])
+        subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && make"])
+
+        # run_command= f"{selected_file}/myapp.exec"
+        # print(run_command)
+        # container.exec_run(run_command)
+
+        result_label.config(text=f"Compiled {selected_file} in {container_id}")
+    except docker.errors.NotFound:
+        result_label.config(text="Container not found")
+
+
+def run_selected_file():
+    selected_file = file_listbox.get(file_listbox.curselection())
+    container_id = container_id_entry.get()
+    try:
+        client = docker.from_env()
+        container = client.containers.get(container_id)
+        subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && ./myapp.exec"])
         result_label.config(text=f"Compiled {selected_file} in {container_id}")
     except docker.errors.NotFound:
         result_label.config(text="Container not found")
@@ -94,6 +117,9 @@ download_button.pack()
 
 compile_button = Button(root, text="Compile Selected Project", command=compile_selected_file)
 compile_button.pack()
+
+run_button = Button(root, text="Run Selected Project", command=run_selected_file)
+run_button.pack()
 
 upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
 upload_changes_button.pack()
