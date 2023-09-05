@@ -89,10 +89,10 @@ scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 file_listbox.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=file_listbox.yview)
 
-download_button = tk.Button(root, text="Download Files", command=download_files)
+download_button = tk.Button(root, text="Activate/Download Project And Open With VS Code", command=download_files)
 download_button.pack()
 
-compile_button = Button(root, text="Compile Selected File", command=compile_selected_file)
+compile_button = Button(root, text="Compile Selected Project", command=compile_selected_file)
 compile_button.pack()
 
 upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
