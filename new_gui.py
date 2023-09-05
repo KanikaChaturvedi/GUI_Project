@@ -45,21 +45,16 @@ def download_files():
         # Open VS Code with the selected directory
         subprocess.Popen(["code", selected_directory])
 
-# def open_vscode():
-#     # ... (previous code)
-#     # selected_directory = tk.filedialog.askdirectory()
-#     global selected_directory
-#     if selected_directory:
-#         # Open VS Code with the selected directory
-#         subprocess.Popen(["code", selected_directory])
 
 def upload_changes():
     global container_directory, selected_directory
     # container_id = container_id_entry.get()
-    
+    selected_directory = filedialog.askdirectory()
     if selected_directory:
         # Use 'docker cp' to copy files from the selected local directory to the container directory
-        subprocess.run(["docker", "cp", f"{selected_directory}/{selected_file}", f"{container_id}:/app"])
+        subprocess.run(["docker", "cp", f"{selected_directory}", f"{container_id}:/app"])
+        print(selected_directory)
+
 
 def compile_selected_file():
     selected_file = file_listbox.get(file_listbox.curselection())
@@ -73,8 +68,8 @@ def compile_selected_file():
     except docker.errors.NotFound:
         result_label.config(text="Container not found")
 
-# Create the GUI (previous code)
 
+# Create the GUI (previous code)
 root = tk.Tk()
 root.title("Docker Container File Manager")
 
@@ -83,13 +78,6 @@ container_id_label.pack()
 container_id_entry = tk.Entry(root, width=70)
 container_id_entry.pack()
 
-# container_directory_label = tk.Label(root, text="Container Directory:")
-# container_directory_label.pack()
-# container_directory_entry = tk.Entry(root)
-# container_directory_entry.pack()
-
-# set_container_directory_button = tk.Button(root, text="Set Container Directory", command=list_container_files)
-# set_container_directory_button.pack()
 
 list_files_button = tk.Button(root, text="List Files", command=list_container_files)
 list_files_button.pack()
@@ -101,15 +89,11 @@ scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 file_listbox.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=file_listbox.yview)
 
-
 download_button = tk.Button(root, text="Download Files", command=download_files)
 download_button.pack()
 
 compile_button = Button(root, text="Compile Selected File", command=compile_selected_file)
 compile_button.pack()
-
-# open_vscode_button = tk.Button(root, text="Open in VS Code", command=open_vscode)
-# open_vscode_button.pack()
 
 upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
 upload_changes_button.pack()
