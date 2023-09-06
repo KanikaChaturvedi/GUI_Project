@@ -69,10 +69,6 @@ def compile_selected_file():
             stderr=subprocess.PIPE,
             text=True)
 
-
-
-
-
         # run_command= f"{selected_file}/myapp.exec"
         # print(run_command)
         # container.exec_run(run_command)
