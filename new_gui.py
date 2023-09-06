@@ -9,7 +9,7 @@ import docker
 import os
 from tkinter import filedialog
 from tkinter import Listbox, Scrollbar, Button, Label
-# Initialize container and selected directory paths to None
+# Initialize golbal variables
 container_directory = None
 selected_directory = None
 container_id = None
@@ -21,10 +21,8 @@ def list_container_files():
     command = f'docker exec {container_id} ls -a /app'
     files = os.popen(command).read().splitlines()
 
-    # Clear previous items from the listbox
     file_listbox.delete(0, tk.END)
 
-    # Insert the list of files into the listbox
     for file in files:
         file_listbox.insert(tk.END, file)
 
@@ -37,12 +35,10 @@ def download_files():
     # selected_file = file_listbox.get(file_listbox.curselection())
     print(selected_file)
     if selected_directory:
-        # Use 'docker cp' to copy files from the container to the local system
         subprocess.run(["docker", "cp", f"{container_id}:/app/{selected_file}", selected_directory])
         print(selected_directory)
     
     if selected_directory:
-        # Open VS Code with the selected directory
         subprocess.Popen(["code", selected_directory])
 
 
@@ -51,7 +47,6 @@ def upload_changes():
     # container_id = container_id_entry.get()
     selected_directory = filedialog.askdirectory()
     if selected_directory:
-        # Use 'docker cp' to copy files from the selected local directory to the container directory
         subprocess.run(["docker", "cp", f"{selected_directory}", f"{container_id}:/app"])
         print(selected_directory)
 
@@ -68,7 +63,7 @@ def compile_selected_file():
         # print(compile_command)
         # container.exec_run(compile_command)
         # subprocess.Popen(["make", {selected_file}])
-        # subprocess.run(["docker", "exec", container_id_entry.get(), "cd", selected_file, "&&", "make"])
+        # subprocess.run(["docker", "exec", container_id_entry.get(), "cd", selected_file, "&&", "make"])-----Not worked
         result_compile= subprocess.run(["docker", "exec", container_id_entry.get(), "bash", "-c", f"cd {selected_file} && make"], 
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -82,15 +77,14 @@ def compile_selected_file():
         output = result_compile.stdout
         error = result_compile.stderr
         
-        # Display the compilation result in the Text widget
-        output_text.config(state=tk.NORMAL)  # Allow editing
-        output_text.delete("1.0", tk.END)  # Clear existing content
+        output_text.config(state=tk.NORMAL)  
+        output_text.delete("1.0", tk.END) 
         output_text.insert("1.0", f"Compiled {selected_file} in {container_id}\n")
         output_text.insert(tk.END, "Compilation Output:\n\n")
         output_text.insert(tk.END, output)
         output_text.insert(tk.END, "\n\n\nCompilation Error (if any):\n\n")
         output_text.insert(tk.END, error)
-        output_text.config(state=tk.DISABLED)  # Disable editing
+        output_text.config(state=tk.DISABLED) 
     except docker.errors.NotFound:
         result_label.config(text="Container not found")
 
@@ -110,20 +104,17 @@ def run_selected_file():
             stderr=subprocess.PIPE,
             text=True)
         
-
-        # result_label.config(text=f"Compiled {selected_file} in {container_id}")
         output = result_run.stdout
         error = result_run.stderr
         
-        # Display the compilation result in the Text widget
-        output_text.config(state=tk.NORMAL)  # Allow editing
-        output_text.delete("1.0", tk.END)  # Clear existing content
+        output_text.config(state=tk.NORMAL)  
+        output_text.delete("1.0", tk.END)  
         output_text.insert("1.0", f"Executed {selected_file} in {container_id}\n")
         output_text.insert(tk.END, "Executed Output:\n\n")
         output_text.insert(tk.END, output)
         output_text.insert(tk.END, "\n\n\nExecution Error (if any):\n\n")
         output_text.insert(tk.END, error)
-        output_text.config(state=tk.DISABLED)  # Disable editing
+        output_text.config(state=tk.DISABLED)  
     except docker.errors.NotFound:
         result_label.config(text="Container not found")
 
