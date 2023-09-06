@@ -8,7 +8,7 @@ int main( int argc, char const *argv[])
     printf("result: %d\n", r);
     printf("HEY, THIS IS ASSIGNMENT 1 !\n");
     printf("HEY, THIS IS ASSIGNMENT 1 !\n");
-    // printf("HEY, THIS IS ASSIGNMENT 1 !\n");
-    // printf("HEY, THIS IS ASSIGNMENT 1 !\n");
+    printf("HEY, THIS IS ASSIGNMENT 1 !\n");
+    printf("HEY, THIS IS ASSIGNMENT 1 !\n");
     return 0;
 }
