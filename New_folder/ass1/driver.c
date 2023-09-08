@@ -10,5 +10,7 @@ int main( int argc, char const *argv[])
     printf("HEY, THIS IS ASSIGNMENT 1 !\n");
     printf("HEY, THIS IS ASSIGNMENT 1 !\n");
     printf("HEY, THIS IS ASSIGNMENT 1 !\n");
+    printf("HEY, THIS IS ASSIGNMENT 1 !\n");
+    printf("Imported zip in current directory !\n");
     return 0;
 }

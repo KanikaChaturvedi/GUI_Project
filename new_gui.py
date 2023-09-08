@@ -9,6 +9,7 @@ import docker
 import os
 from tkinter import filedialog
 from tkinter import Listbox, Scrollbar, Button, Label
+import zipfile
 # Initialize golbal variables
 container_directory = None
 selected_directory = None
@@ -69,10 +70,6 @@ def compile_selected_file():
             stderr=subprocess.PIPE,
             text=True)
 
-
-
-
-
         # run_command= f"{selected_file}/myapp.exec"
         # print(run_command)
         # container.exec_run(run_command)
@@ -123,6 +120,26 @@ def run_selected_file():
         result_label.config(text="Container not found")
 
 
+def import_zips():
+    selected_file = file_listbox.get(file_listbox.curselection())
+    selected_files = filedialog.askopenfilenames(filetypes=[("ZIP files", "*.zip")])
+    if selected_files:
+        for file in selected_files:
+            # if file:
+            #     with zipfile.ZipFile(file, 'r') as zip_ref:
+            # # Extract the contents of the selected zip file into /app/ass1 directory in the container
+            #         zip_ref.extractall(os.path.join("/app", "ass1"))
+            # print(file);
+            # print(selected_file)
+            # Copy zip file to our docker container 
+            # subprocess.run(["docker", "exec", f"{container_id_entry.get()}", "unzip", "-o", file, "-d", f"/app/{selected_file}"])
+            subprocess.run(["docker", "cp", file, f"{container_id_entry.get()}:/app/{selected_file}"])
+        # List the updated contents of the current directory
+        # list_container_files()
+
+def exit_gui():
+    root.destroy()  # Close the GUI window
+
 # Create the GUI (previous code)
 root = tk.Tk()
 root.title("Docker Container File Manager")
@@ -155,11 +172,19 @@ run_button.pack()
 upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
 upload_changes_button.pack()
 
+exit_button = tk.Button(root, text="Exit", command=exit_gui)
+exit_button.pack()
+
+import_button = tk.Button(root, text="Import ZIP Files", command=import_zips)
+import_button.pack()
+
 output_text = tk.Text(root, height=50, width=100, wrap=tk.WORD)
 output_text.pack()
 
 result_label = Label(root, text="")
 result_label.pack()
+
+
 
 root.geometry("1200x1000")
 root.mainloop()
