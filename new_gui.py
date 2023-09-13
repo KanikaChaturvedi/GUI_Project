@@ -142,7 +142,39 @@ def exit_gui():
 
 # Create the GUI (previous code)
 root = tk.Tk()
+menubar = tk.Menu(root)
 root.title("Docker Container File Manager")
+
+
+
+# #################################################################### starting of Menu 1
+
+menu1 = tk.Menu(menubar, tearoff=0)
+menu1.add_command(label="Import Project", command=import_zips)
+menu1.add_command(label="List Files", command=list_container_files)
+# menu1.add_command(label="Create Submission", command=create_submission)
+menubar.add_cascade(label="Menu1", menu=menu1)
+
+########################################################################## Ending of Menu 1 
+
+
+
+###########################################################################Starting of menu 2
+
+menu2 = tk.Menu(menubar, tearoff=0)
+menu2.add_command(label="Compile Selected Project", command=compile_selected_file)
+menu2.add_command(label="Run Selected Project", command=run_selected_file)
+menu2.add_command(label="Activate And Open With VS Code", command=download_files)
+menu2.add_command(label="Upload Changes", command=upload_changes)
+menubar.add_cascade(label="Menu2", menu=menu2)
+
+###########################################################################Ending of Menu 2
+
+
+
+
+
+
 
 container_id_label = tk.Label(root, text="Container ID:")
 container_id_label.pack()
@@ -150,8 +182,8 @@ container_id_entry = tk.Entry(root, width=70)
 container_id_entry.pack()
 
 
-list_files_button = tk.Button(root, text="List Files", command=list_container_files)
-list_files_button.pack()
+# list_files_button = tk.Button(root, text="List Files", command=list_container_files)
+# list_files_button.pack()
 
 file_listbox = tk.Listbox(root, width=100)
 file_listbox.pack()
@@ -160,23 +192,23 @@ scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 file_listbox.config(yscrollcommand=scrollbar.set)
 scrollbar.config(command=file_listbox.yview)
 
-download_button = tk.Button(root, text="Activate And Open With VS Code", command=download_files)
-download_button.pack()
+# download_button = tk.Button(root, text="Activate And Open With VS Code", command=download_files)
+# download_button.pack()
 
-compile_button = Button(root, text="Compile Selected Project", command=compile_selected_file)
-compile_button.pack()
+# compile_button = Button(root, text="Compile Selected Project", command=compile_selected_file)
+# compile_button.pack()
 
-run_button = Button(root, text="Run Selected Project", command=run_selected_file)
-run_button.pack()
+# run_button = Button(root, text="Run Selected Project", command=run_selected_file)
+# run_button.pack()
 
-upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
-upload_changes_button.pack()
+# upload_changes_button = tk.Button(root, text="Upload Changes", command=upload_changes)
+# upload_changes_button.pack()
 
 exit_button = tk.Button(root, text="Exit", command=exit_gui)
 exit_button.pack()
 
-import_button = tk.Button(root, text="Import ZIP Files", command=import_zips)
-import_button.pack()
+# import_button = tk.Button(root, text="Import ZIP Files", command=import_zips)
+# import_button.pack()
 
 output_text = tk.Text(root, height=50, width=100, wrap=tk.WORD)
 output_text.pack()
@@ -184,7 +216,6 @@ output_text.pack()
 result_label = Label(root, text="")
 result_label.pack()
 
-
-
-root.geometry("1200x1000")
+root.config(menu=menubar)
+root.geometry("1500x1500")
 root.mainloop()
