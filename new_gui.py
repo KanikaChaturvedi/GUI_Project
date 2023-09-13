@@ -4,7 +4,7 @@ import subprocess
 import docker
 import os
 from tkinter import filedialog
-from tkinter import Listbox, Scrollbar, Button, Label
+from tkinter import Listbox, Scrollbar, Button, Label, messagebox
 import zipfile
 # Initialize golbal variables
 container_directory = None
@@ -27,7 +27,7 @@ def download_files():
     global selected_directory, container_directory, selected_file
     selected_file = file_listbox.get(file_listbox.curselection())
     selected_directory = os.path.expanduser("~/Downloads")  # Get the user's home directory
-    print(selected_file)
+    # print(selected_file)
     if selected_directory:
         subprocess.run(["docker", "cp", f"{container_id}:/app/{selected_file}", selected_directory])
     
@@ -42,7 +42,7 @@ def upload_changes():
     selected_directory = filedialog.askdirectory()
     if selected_directory:
         subprocess.run(["docker", "cp", f"{selected_directory}", f"{container_id}:/app"])
-        print(selected_directory)
+        # print(selected_directory)
 
 
 def compile_selected_file():
@@ -105,6 +105,21 @@ def import_zips():
         for file in selected_files:
             subprocess.run(["docker", "cp", file, f"{container_id_entry.get()}:/app/{selected_file}"])
 
+
+def create_submission():
+    global container_id
+    selected_file = file_listbox.get(file_listbox.curselection())
+    temp_container_dir = "/tmp/"
+    temp_zip_filename = "final_assignment.zip"
+    local_directory = filedialog.askdirectory()
+    temp_zip_filepath = os.path.join(temp_container_dir, temp_zip_filename)
+    try:
+        subprocess.run(["docker", "exec", container_id, "zip", "-r", temp_zip_filepath, selected_file])
+        subprocess.run(["docker", "cp", f"{container_id}:{temp_zip_filepath}", local_directory])
+        subprocess.run(["docker", "exec", container_id, "rm", temp_zip_filepath])
+    except Exception as e:
+        print(str(e))
+
 def exit_gui():
     root.destroy()  # Close the GUI window
 
@@ -119,7 +134,7 @@ root.title("Docker Container File Manager")
 menu1 = tk.Menu(menubar, tearoff=0)
 menu1.add_command(label="Import Project", command=import_zips)
 menu1.add_command(label="List Files", command=list_container_files)
-# menu1.add_command(label="Create Submission", command=create_submission)
+menu1.add_command(label="Create Submission", command=create_submission)
 menubar.add_cascade(label="Menu1", menu=menu1)
 
 ########################################################################## Ending of Menu 1 
@@ -158,5 +173,5 @@ result_label = Label(root, text="")
 result_label.pack()
 
 root.config(menu=menubar)
-root.geometry("1500x1500")
+root.geometry("1000x1000")
 root.mainloop()
