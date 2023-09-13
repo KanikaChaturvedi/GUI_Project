@@ -37,15 +37,10 @@ def download_files():
         subprocess.Popen(["code", selected_directory])
 
 
-def upload_changes():
-    global container_directory, selected_directory
-    selected_directory = filedialog.askdirectory()
-    if selected_directory:
-        subprocess.run(["docker", "cp", f"{selected_directory}", f"{container_id}:/app"])
-        # print(selected_directory)
-
-
 def compile_selected_file():
+    global selected_directory, container_id
+    print(selected_directory)
+    subprocess.run(["docker", "cp", f"{selected_directory}", f"{container_id}:/app"])
     selected_file = file_listbox.get(file_listbox.curselection())
     container_id = container_id_entry.get()
     try:
@@ -145,7 +140,7 @@ menu2 = tk.Menu(menubar, tearoff=0)
 menu2.add_command(label="Compile Selected Project", command=compile_selected_file)
 menu2.add_command(label="Run Selected Project", command=run_selected_file)
 menu2.add_command(label="Activate And Open With VS Code", command=download_files)
-menu2.add_command(label="Upload Changes", command=upload_changes)
+# menu2.add_command(label="Upload Changes", command=upload_changes)
 menubar.add_cascade(label="Menu2", menu=menu2)
 
 ###########################################################################Ending of Menu 2
