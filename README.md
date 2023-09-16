@@ -1,4 +1,8 @@
 # GUI_Project_Testing
+
+Run new_gui.py file
+Then, follow below steps:
+
 Step1> First user will enter the container ID in the top entry box. Then we will show all the contents present inside the container. Contents could be files like C files, python files, Docker file etc and folders, here ass1, ass2 etc.
 Here, we will be mainly working with folders(like assignment1, assignment2 etc).
  
