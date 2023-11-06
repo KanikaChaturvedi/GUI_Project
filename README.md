@@ -10,7 +10,7 @@ Step2> User will click on assignment folders or project and then on 'activate pr
  
 Step3> Now, user will do whatever changes/modifications he/she wants to do and then, the user will click on upload files, we will simply upload the updated folders (here, ass1, ass2 etc) from the local directory back to the container. 
  
- Step4> User will click on the activated project(the one on which user did modification) and then on the compile selected project. Here will compile the project using Makefile(this makefile will be present inside all the activated project and will be responsible for compiling the selected project) and show the compilation output or errors in bottom text box.
+ Step4> User will click on the activated project(the one on which user did modification) and then on the compile selected project. Here we will compile the project using Makefile(this makefile will be present inside all the activated project and will be responsible for compiling the selected project) and show the compilation output or errors in bottom text box.
  
 Step5> Now user will click on the run selected project and then we will show the output in the bottom text box.
 
